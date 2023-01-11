@@ -1,4 +1,4 @@
-import { openBlock, createBlock, Transition, withCtx, renderSlot, h, reactive, computed, createElementBlock, createElementVNode, normalizeStyle, normalizeClass, createCommentVNode, createTextVNode, toDisplayString, resolveComponent, createVNode, Fragment, renderList, mergeProps, withModifiers } from "vue";
+import { openBlock, createBlock, Transition, withCtx, renderSlot, h, ref, computed, createElementBlock, createElementVNode, normalizeStyle, normalizeClass, createCommentVNode, createTextVNode, toDisplayString, resolveComponent, createVNode, Fragment, renderList, mergeProps, withModifiers } from "vue";
 import { createPopper } from "@popperjs/core";
 function toInteger$2(dirtyNumber) {
   if (dirtyNumber === null || dirtyNumber === true || dirtyNumber === false) {
@@ -2648,9 +2648,9 @@ const _sfc_main$9 = {
     },
     show(opts = {}) {
       opts.action = "show";
-      const ref = opts.ref || this.ref;
+      const ref2 = opts.ref || this.ref;
       const delay = opts.showDelay >= 0 ? opts.showDelay : this.showDelay;
-      if (!ref) {
+      if (!ref2) {
         if (opts.callback) {
           opts.callback({
             completed: false,
@@ -2674,9 +2674,9 @@ const _sfc_main$9 = {
     },
     hide(opts = {}) {
       opts.action = "hide";
-      const ref = opts.ref || this.ref;
+      const ref2 = opts.ref || this.ref;
       const delay = opts.hideDelay >= 0 ? opts.hideDelay : this.hideDelay;
-      if (!this.ref || ref !== this.ref) {
+      if (!this.ref || ref2 !== this.ref) {
         if (opts.callback) {
           opts.callback({
             ...opts,
@@ -5030,10 +5030,10 @@ const defaultConfig = {
     }
   }
 };
-const state = reactive(defaultConfig);
+const state = ref(defaultConfig);
 const computedLocales = computed(() => {
-  return mapValues_1(state.locales, (v) => {
-    v.masks = defaultsDeep_1(v.masks, state.masks);
+  return mapValues_1(state.value.locales, (v) => {
+    v.masks = defaultsDeep_1(v.masks, state.value.masks);
     return v;
   });
 });
@@ -5041,11 +5041,11 @@ const getDefault = (path) => {
   if (window && has(window.__vcalendar__, path)) {
     return get_1(window.__vcalendar__, path);
   }
-  return get_1(state, path);
+  return get_1(state.value, path);
 };
 const setupDefaults = (app, userDefaults) => {
-  app.config.globalProperties.$VCalendar = state;
-  return Object.assign(state, defaultsDeep_1(userDefaults, state));
+  app.config.globalProperties.$VCalendar = state.value;
+  return Object.assign(state.value, defaultsDeep_1(userDefaults, state));
 };
 const rootMixin$1 = {
   props: {
@@ -8043,17 +8043,17 @@ var screensPlugin = {
       defaultScreens
     );
     let shouldRefreshQueries = true;
-    const state2 = reactive({
+    const state2 = ref({
       matches: [],
       queries: []
     });
     const refreshMatches = () => {
-      state2.matches = toPairs_1(state2.queries).filter((p) => p[1].matches).map((p) => p[0]);
+      state2.value.matches = toPairs_1(state2.value.queries).filter((p) => p[1].matches).map((p) => p[0]);
     };
     const refreshQueries = () => {
       if (!shouldRefreshQueries || !window || !window.matchMedia)
         return;
-      state2.queries = mapValues_1(screens, (v) => {
+      state2.value.queries = mapValues_1(screens, (v) => {
         const query = window.matchMedia(buildMediaQuery(v));
         if (isFunction_1(query.addEventListener)) {
           query.addEventListener("change", refreshMatches);
@@ -8071,7 +8071,7 @@ var screensPlugin = {
       },
       computed: {
         $screens() {
-          return (config, def) => state2.matches.reduce(
+          return (config, def) => state2.value.matches.reduce(
             (prev, curr) => has(config, curr) ? config[curr] : prev,
             isUndefined_1(def) ? config.default : def
           );

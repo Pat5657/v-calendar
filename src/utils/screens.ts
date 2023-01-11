@@ -1,4 +1,4 @@
-import { App, reactive } from 'vue';
+import { App, ref } from 'vue';
 import buildMediaQuery from './buildMediaQuery';
 import defaultScreens from './defaults/screens.json';
 import {
@@ -26,20 +26,20 @@ export default {
     );
 
     let shouldRefreshQueries = true;
-    const state = reactive<ScreensState>({
+    const state = ref<ScreensState>({
       matches: [],
       queries: [],
     });
 
     const refreshMatches = () => {
-      state.matches = toPairs(state.queries)
+      state.value.matches = toPairs(state.value.queries)
         .filter((p: Array<any>) => p[1].matches)
         .map((p: Array<any>) => p[0]);
     };
 
     const refreshQueries = () => {
       if (!shouldRefreshQueries || !window || !window.matchMedia) return;
-      state.queries = mapValues(screens, (v: string) => {
+      state.value.queries = mapValues(screens, (v: string) => {
         const query = window.matchMedia(buildMediaQuery(v));
         if (isFunction(query.addEventListener)) {
           query.addEventListener('change', refreshMatches);
@@ -63,7 +63,7 @@ export default {
       computed: {
         $screens(): Function {
           return (config: any, def: any) =>
-            state.matches.reduce(
+            state.value.matches.reduce(
               (prev, curr) => (has(config, curr) ? config[curr] : prev),
               isUndefined(def) ? config.default : def,
             );

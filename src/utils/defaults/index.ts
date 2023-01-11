@@ -1,4 +1,4 @@
-import { App, reactive, computed } from 'vue';
+import { App, ref, computed } from 'vue';
 import { defaultsDeep, mapValues, get, has } from '../_';
 import touch from './touch.json';
 import masks from './masks.json';
@@ -57,11 +57,11 @@ const defaultConfig: Defaults = {
   },
 };
 
-const state = reactive(defaultConfig);
+const state = ref(defaultConfig);
 
 const computedLocales = computed(() => {
-  return mapValues(state.locales, (v: any) => {
-    v.masks = defaultsDeep(v.masks, state.masks);
+  return mapValues(state.value.locales, (v: any) => {
+    v.masks = defaultsDeep(v.masks, state.value.masks);
     return v;
   });
 });
@@ -72,10 +72,10 @@ export const getDefault = (path: string) => {
   if (window && has(window.__vcalendar__, path)) {
     return get(window.__vcalendar__, path);
   }
-  return get(state, path);
+  return get(state.value, path);
 };
 
 export const setupDefaults = (app: App, userDefaults: Defaults | undefined) => {
-  app.config.globalProperties.$VCalendar = state;
-  return Object.assign(state, defaultsDeep(userDefaults, state));
+  app.config.globalProperties.$VCalendar = state.value;
+  return Object.assign(state.value, defaultsDeep(userDefaults, state));
 };
