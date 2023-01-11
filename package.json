@@ -43,6 +43,7 @@
     "lint": "eslint . --ext .js,.vue"
   },
   "dependencies": {
+    "vue": "^3.1.0",
     "@popperjs/core": "2.4.0",
     "@types/lodash": "^4.14.165",
     "date-fns": "^2.16.1",
@@ -82,7 +83,6 @@
     "ts-jest": "^27.1.3",
     "typescript": "3.9.3",
     "vite": "^2.4.3",
-    "vue": "^3.1.0",
     "vue3-jest": "^27.0.0-alpha.1"
   },
   "browserslist": [
