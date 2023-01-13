@@ -21,6 +21,7 @@ const config: UserConfig = {
           vue: 'Vue',
           '@popperjs/core': 'PopperCore',
         },
+        exports: 'named',
       },
     },
   },
