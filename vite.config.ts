@@ -13,7 +13,7 @@ const config: UserConfig = {
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
-      external: ['@popperjs/core'],
+      external: ['vue', '@popperjs/core'],
       output: {
         // Provide global variables to use in the UMD build
         // for externalized deps
